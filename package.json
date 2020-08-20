@@ -7,7 +7,9 @@
     "start:dev": "concurrently \"yarn start:client\" \"yarn start:server:nodemon\"",
     "start:client": "yarn --cwd packages/client start",
     "start:server": "yarn --cwd packages/server start",
-    "test": "yarn --cwd packages/client test"
+    "start:server:nodemon": "yarn --cwd packages/server start:nodemon",
+    "test:client": "yarn --cwd packages/client test",
+    "test:server": "yarn -cwd packages/server test"
   },
   "private": true,
   "workspaces": [
