@@ -17,10 +17,6 @@ app.get('/api', (req, res) => {
   res.json({ status: 200, message: 'GET /api' });
 });
 
-app.post('/api', (req, res) => {
-  res.json({ status: 200, ...req.body });
-});
-
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });
