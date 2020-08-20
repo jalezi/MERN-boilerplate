@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
 const app = express();
-const port = 4000;
+const port = process.env.NODE_ENV === 'test' ? 4001 : 4000;
 
 app.use(
   bodyParser.urlencoded({
