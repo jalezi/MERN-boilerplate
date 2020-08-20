@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
 const app = express();
-const port = process.env.NODE_ENV === 'test' ? 4001 : 4000;
+const env = process.env.NODE_ENV || 'development';
+const port = 4000; // port must match proxy settings in client package.json
 
 app.use(
   bodyParser.urlencoded({
@@ -17,8 +18,10 @@ app.get('/api', (req, res) => {
   res.json({ status: 200, message: 'GET /api' });
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on port: ${port}`);
-});
+if (env !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server listening on port: ${port}`);
+  });
+}
 
 module.exports = app;
