@@ -1,6 +1,9 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+
+const { connectToDB } = require('./config');
 
 const app = express();
 const env = process.env.NODE_ENV || 'development';
@@ -19,6 +22,19 @@ app.get('/api', (req, res) => {
 });
 
 if (env !== 'test') {
+  (async () => {
+    await connectToDB();
+  })();
+
+  process.on('SIGINT', async () => {
+    await mongoose.connection.close(() => {
+      console.log(
+        'Mongoose default connection is disconnected due to application termination!'
+      );
+      process.exit(0);
+    });
+  });
+
   app.listen(port, () => {
     console.log(`Server listening on port: ${port}`);
   });
