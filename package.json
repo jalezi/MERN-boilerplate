@@ -9,7 +9,7 @@
     "start:server": "yarn --cwd packages/server start",
     "start:server:nodemon": "yarn --cwd packages/server start:nodemon",
     "test:client": "yarn --cwd packages/client test",
-    "test:server": "yarn -cwd packages/server test"
+    "test:server": "yarn --cwd packages/server test"
   },
   "private": true,
   "workspaces": [
