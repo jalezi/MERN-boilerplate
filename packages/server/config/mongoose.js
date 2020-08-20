@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const { dbUri, dbOptions } = require('.');
+const { dbUri, dbUriTest, dbOptions } = require('.');
+
+const env = process.env.NODE_ENV;
+const dbURI = env !== 'test' ? dbUri : dbUriTest;
 
 mongoose.connection.on('connecting', () => {
   console.log('Connection Establishing');
@@ -27,7 +30,7 @@ mongoose.connection.on('error', error => {
 
 module.exports = async () => {
   try {
-    await mongoose.connect(dbUri, dbOptions);
+    await mongoose.connect(dbURI, dbOptions);
   } catch (err) {
     console.log('error: ' + err);
   }

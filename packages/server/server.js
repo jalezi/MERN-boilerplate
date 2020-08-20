@@ -6,7 +6,8 @@ const methodOverride = require('method-override');
 const { connectToDB } = require('./config');
 
 const app = express();
-const env = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV;
 const port = 4000; // port must match proxy settings in client package.json
 
 app.use(
