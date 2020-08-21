@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fs = require('fs');
 
 const { connectToDB } = require('.');
 const { dbUri, dbUriTest, dbOptions } = require('.');
@@ -23,25 +24,59 @@ describe('Require Modules', () => {
   });
 });
 
-describe('DB test connection dbName = mernTest', () => {
-  let connection;
-  let db;
+describe('DATABASE CONNECTIONS', () => {
+  describe('DB test connection dbName = mernTest', () => {
+    let connection;
+    let db;
 
-  beforeAll(async () => {
-    await connectToDB({ url: dbUriTest, options: dbOptions });
-    connection = mongoose.connection;
-    db = connection.db;
+    beforeAll(async () => {
+      await connectToDB({ url: dbUriTest, options: dbOptions });
+      connection = mongoose.connection;
+      db = connection.db;
+    });
+
+    afterAll(async () => {
+      await connection.close();
+      await db.close();
+    });
+
+    it('should connects to testing database', () => {
+      const { url } = connection.client.s;
+      const { databaseName } = db;
+      expect(url).toBe(dbUriTest);
+      expect(databaseName).toBe('mernTest');
+    });
   });
 
-  afterAll(async () => {
-    await connection.close();
-    await db.close();
-  });
+  describe('DB test connection json-mongo database', () => {
+    let connection;
+    let db;
+    let mongoUri;
+    let mongoDbName;
 
-  it('should connects to testing database', () => {
-    const { url } = connection.client.s;
-    const { databaseName } = db;
-    expect(url).toBe(dbUriTest);
-    expect(databaseName).toBe('mernTest');
+    beforeAll(async () => {
+      mongoUri = global.__MONGO_URI__;
+      mongoDbName = global.__MONGO_DB_NAME__;
+      await connectToDB({
+        url: mongoUri,
+        options: { ...dbOptions, dbName: mongoDbName },
+      });
+      connection = mongoose.connection;
+      db = connection.db;
+    });
+
+    afterAll(async () => {
+      await connection.close();
+      await db.close();
+      // https://github.com/shelfio/jest-mongodb/issues/214
+      fs.unlink(process.cwd() + '/globalConfig.json', () => {});
+    });
+
+    it('should connects to testing db', () => {
+      const { url } = connection.client.s;
+      const { databaseName } = db;
+      expect(url).toBe(mongoUri);
+      expect(databaseName).toBe(mongoDbName);
+    });
   });
 });
