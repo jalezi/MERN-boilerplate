@@ -22,6 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# specials
+# specials 
 toImplement.js
 credits.md
+packages/server/globalConfig.json
