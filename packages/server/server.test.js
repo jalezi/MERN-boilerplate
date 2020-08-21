@@ -3,7 +3,7 @@ const request = require('supertest');
 
 const { connectToDB } = require('./config');
 const app = require('./server');
-const { dbUriTest: dbUri } = require('./config');
+const { dbOptions } = require('./config');
 
 test('Sample test', () => {
   expect(true).toBe(true);
@@ -21,9 +21,16 @@ describe('Endpoints', () => {
 describe('DB connection', () => {
   let connection;
   let db;
+  let mongoUri;
+  let mongoDbName;
 
   beforeAll(async () => {
-    await connectToDB();
+    mongoUri = global.__MONGO_URI__;
+    mongoDbName = global.__MONGO_DB_NAME__;
+    await connectToDB({
+      url: mongoUri,
+      options: { ...dbOptions, dbName: mongoDbName },
+    });
     connection = mongoose.connection;
     db = connection.db;
   });
@@ -34,9 +41,9 @@ describe('DB connection', () => {
   });
 
   it('should connects to testing db', () => {
-    const { name } = connection;
     const { url } = connection.client.s;
-    expect(dbUri).toBe(url);
-    expect(db.databaseName).toBe(name);
+    const { databaseName } = db;
+    expect(url).toBe(mongoUri);
+    expect(databaseName).toBe(mongoDbName);
   });
 });
