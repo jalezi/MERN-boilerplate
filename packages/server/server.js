@@ -24,7 +24,11 @@ app.get('/api', (req, res) => {
 
 if (env !== 'test') {
   (async () => {
-    await connectToDB();
+    try {
+      await connectToDB();
+    } catch (error) {
+      console.log(error);
+    }
   })();
 
   process.on('SIGINT', async () => {

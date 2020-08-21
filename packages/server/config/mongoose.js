@@ -27,8 +27,8 @@ mongoose.connection.on('close', () => {
 mongoose.connection.on('error', error => {
   console.log('ERROR: ' + error);
 });
-
-module.exports = async ({ url = dbURI, options = dbOptions }) => {
+module.exports = async (object = { url: dbURI, options: dbOptions }) => {
+  const { url, options } = object;
   try {
     await mongoose.connect(url, options);
   } catch (err) {
