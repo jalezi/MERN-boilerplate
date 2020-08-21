@@ -25,7 +25,7 @@ describe('Require Modules', () => {
 });
 
 describe('DATABASE CONNECTIONS', () => {
-  describe('DB test connection dbName = mernTest', () => {
+  describe('DB test connection mernTest database', () => {
     let connection;
     let db;
 
