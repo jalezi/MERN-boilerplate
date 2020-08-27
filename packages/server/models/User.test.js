@@ -72,6 +72,13 @@ describe('User Model Test', () => {
     expect(savedUser.loginUsing).toBe(userData.loginUsing);
   });
 
+  it('finds user by id', async () => {
+    const validUser = new User(userData);
+    const savedUser = await validUser.save();
+    const user = await User.findById(savedUser.id);
+    expect(user.id).toEqual(savedUser.id);
+  });
+
   // You shouldn't be able to add in any field that isn't defined in the schema
   it('inserts user successfully, but the field does not defined in schema should be undefined', async () => {
     const userWithInvalidField = new User({
