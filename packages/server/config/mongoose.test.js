@@ -78,4 +78,21 @@ describe('Database Connections ', () => {
       expect(databaseName).toBe(mongoDbName);
     });
   });
+
+  describe('DB test error connection ', () => {
+    it('should not connect to db and should throw an error', async () => {
+      // error: MongoParseError: Invalid connection string
+      const mongoUri = 'wrong url';
+      const mongoDbName = global.__MONGO_DB_NAME__;
+      try {
+        await connectToDB({
+          url: mongoUri,
+          options: { ...dbOptions, dbName: mongoDbName },
+        });
+      } catch (error) {
+        expect(error).toBeInstanceOf(mongoose.Error.MongoParseError);
+        expect(error.message).toEqual('Invalid connection string');
+      }
+    });
+  });
 });
