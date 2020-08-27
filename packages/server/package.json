@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "start:nodemon": "nodemon server.js",
-    "test": "set NODE_ENV=test&& jest --verbose --runInBand"
+    "test": "set NODE_ENV=test&& jest --runInBand"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,8 @@
     "supertest": "^4.0.2"
   },
   "jest": {
-    "preset": "@shelf/jest-mongodb"
+    "preset": "@shelf/jest-mongodb",
+    "verbose": true,
+    "collectCoverage": true
   }
 }
