@@ -34,6 +34,6 @@ module.exports = async (object = { url: dbURI, options: dbOptions }) => {
   try {
     await mongoose.connect(url, options);
   } catch (err) {
-    console.log('error: ' + err);
+    shouldConsoleLog && console.log('error: ' + err);
   }
 };
