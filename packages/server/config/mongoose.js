@@ -29,6 +29,7 @@ mongoose.connection.on('close', () => {
 mongoose.connection.on('error', error => {
   shouldConsoleLog && console.log('ERROR: ' + error);
 });
+
 module.exports = async (object = { url: dbURI, options: dbOptions }) => {
   const { url, options } = object;
   try {
