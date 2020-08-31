@@ -1,7 +1,7 @@
 const request = require('supertest');
 
 const { connectToDB } = require('./config');
-const { app } = require('./server');
+const { app } = require('./app');
 const { dbOptions } = require('./config');
 
 test('Sample test', () => {

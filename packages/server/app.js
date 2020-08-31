@@ -41,6 +41,7 @@ if (env !== 'test') {
         timeout: 500,
       });
 
+      process.stdin.resume();
       process.on('uncaughtException', exitHandler(1, 'Unexpected Error'));
       process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'));
       process.on('SIGINT', exitHandler(0, 'SIGINT'));
