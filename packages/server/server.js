@@ -31,11 +31,11 @@ if (env !== 'test') {
         if (err) {
           console.log('something bad happened', err);
         } else {
-          process.send = process.send || function () {};
-          process.send('ready');
+          process.send && process.send('online');
           console.log(`Server is listening on ${port}`);
         }
       });
+
       const exitHandler = closeServer(server, {
         coredump: false,
         timeout: 500,
