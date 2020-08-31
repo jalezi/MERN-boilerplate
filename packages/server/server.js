@@ -33,9 +33,18 @@ if (env !== 'test') {
         } else {
           process.send = process.send || function () {};
           process.send('ready');
-          console.log(`server is listening on ${port}`);
+          console.log(`Server is listening on ${port}`);
         }
       });
+      const exitHandler = closeServer(server, {
+        coredump: false,
+        timeout: 500,
+      });
+
+      process.on('uncaughtException', exitHandler(1, 'Unexpected Error'));
+      process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'));
+      process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
+      process.on('SIGINT', exitHandler(0, 'SIGINT'));
     } catch (error) {
       console.log('Mongo connection error', error);
     }
@@ -52,8 +61,4 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1);
 });
 
-process.on('SIGTERM', () => closeServer(server, 'SIGTERM'));
-
-process.on('SIGINT', () => closeServer(server, 'SIGINT'));
-
-module.exports = { app, server };
+module.exports = { app };

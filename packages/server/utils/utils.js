@@ -6,16 +6,19 @@ const isNodeEnvTest = () => {
 
 exports.isNodeEnvTest = isNodeEnvTest;
 
-const terminateDbConnection = async () => {
-  console.log('Http server closed.');
+const abortOrExit = (code = 0, coredump = false) => () => {
+  coredump ? process.abort() : process.exit(code);
+};
+
+const terminateDbConnection = () => async cb => {
   // boolean means [force], see in mongoose doc
   await mongoose.connection.close(false, () => {
     console.log('MongoDb connection closed.');
-    process.exit(0);
+    cb ? cb() : null;
   });
 };
 
-const exitEvents = {
+const logExitEvents = {
   SIGTERM: () =>
     console.log(`Process ${process.pid} received a SIGTERM signal`),
   SIGINT: () => console.log(`Process ${process.pid} has been interrupted`),
@@ -23,11 +26,33 @@ const exitEvents = {
 
 exports.terminateDbConnection = terminateDbConnection;
 
-const closeServer = (server, infoText) => {
-  exitEvents[infoText]();
-  console.info(`${infoText} signal received.`);
-  console.log('Closing http server.');
-  server.close(terminateDbConnection);
+// based on https://blog.heroku.com/best-practices-nodejs-errors
+const closeServer = (server, options = { coredump: false, timeout: 500 }) => {
+  const { coredump, timeout } = options;
+
+  // eslint-disable-next-line no-unused-vars
+  return (code, reason) => async (err, promise) => {
+    if (err && err instanceof Error) {
+      // Log error information, use a proper logging library here :)
+      console.log(err.message, err.stack);
+    }
+
+    const closeDbConnection = terminateDbConnection();
+    const exit = abortOrExit(code, coredump);
+    const logExitEvent = logExitEvents[reason];
+    // Attempt a graceful shutdown
+    console.info(`${reason} signal received.`);
+    logExitEvent();
+    console.log('Closing http server.');
+    try {
+      await server.close();
+      console.log('Http server closed.');
+      await closeDbConnection(exit);
+    } catch (error) {
+      console.log(error);
+    }
+    setTimeout(closeDbConnection, timeout).unref();
+  };
 };
 
 exports.closeServer = closeServer;
