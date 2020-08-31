@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
+const createHttpServer = require('./server');
 const { connectToDB } = require('./config');
 const { closeServer } = require('./utils');
 
@@ -27,15 +28,7 @@ if (env !== 'test') {
   (async () => {
     try {
       await connectToDB();
-      server = app.listen(port, err => {
-        if (err) {
-          console.log('something bad happened', err);
-        } else {
-          process.send = process.send || function () {};
-          process.send && process.send('online');
-          console.log(`Server is listening on ${port}`);
-        }
-      });
+      server = await createHttpServer(app, port);
 
       const exitHandler = closeServer(server, {
         coredump: false,
