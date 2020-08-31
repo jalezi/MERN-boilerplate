@@ -36,11 +36,13 @@ const closeServer = (server, options = { coredump: false, timeout: 500 }) => {
 
     const closeDbConnection = terminateDbConnection();
     const exit = abortOrExit(code, coredump);
-    const logExitEvent = logExitEvents[reason];
 
     // Attempt a graceful shutdown
     console.info(`${reason} signal received.`);
+
+    const logExitEvent = logExitEvents[reason];
     logExitEvent && logExitEvent();
+
     console.log('Closing http server.');
     try {
       await server.close();
