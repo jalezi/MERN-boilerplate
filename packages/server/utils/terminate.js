@@ -6,17 +6,20 @@ const abortOrExit = (code = 0, coredump = false) => () => {
 
 const terminateDbConnection = () => async cb => {
   // boolean means [force], see in mongoose doc
-  console.log('Terminating DB');
   await mongoose.connection.close(false, () => {
-    console.log('MongoDb connection closed.');
     cb || cb();
   });
 };
 
 const logExitEvents = {
+  unhandledRejection: () =>
+    console.log(`Process ${process.pid} received a unhandledRejection signal`),
+  uncaughtException: () =>
+    console.log(`Process ${process.pid} received a uncaughtException signal`),
   SIGTERM: () =>
     console.log(`Process ${process.pid} received a SIGTERM signal`),
   SIGINT: () => console.log(`Process ${process.pid} has been interrupted`),
+  SIGQUIT: () => console.log(`Process ${process.pid} has been interrupted`),
 };
 
 const logError = err => console.log(err.message, err.stack);
@@ -33,24 +36,22 @@ const closeServer = (server, options = { coredump: false, timeout: 500 }) => {
 
     // Log error information, use a proper logging library here :)
     err && err instanceof Error && logError(err);
+    const logExitEvent = logExitEvents[reason];
+    logExitEvent && logExitEvent();
 
     const closeDbConnection = terminateDbConnection();
     const exit = abortOrExit(code, coredump);
 
     // Attempt a graceful shutdown
-    console.info(`${reason} signal received.`);
-
-    const logExitEvent = logExitEvents[reason];
-    logExitEvent && logExitEvent();
-
-    console.log('Closing http server.');
+    console.log('Closing HTTP Server.');
     try {
       await server.close();
-      console.log('Http server closed.');
+      console.log('HTTP Server Closed.');
       await closeDbConnection(exit);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
+
     setTimeout(closeDbConnection, timeout).unref();
   };
 };

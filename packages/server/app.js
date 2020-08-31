@@ -35,13 +35,13 @@ if (env !== 'test') {
         timeout: 500,
       });
 
-      process.on('uncaughtException', exitHandler(1, 'Unexpected Error'));
-      process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'));
+      process.on('uncaughtException', exitHandler(1, 'uncaughtException')); // Unexpected Error
+      process.on('unhandledRejection', exitHandler(1, 'unhandledRejection')); // Unhandled Promise
       process.on('SIGINT', exitHandler(0, 'SIGINT'));
       process.on('SIGQUIT', exitHandler(0, 'SIGQUIT'));
       process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
-    } catch (error) {
-      console.log('Mongo connection error', error);
+    } catch (err) {
+      console.log('Mongo or Server connection error', err);
     }
   })();
 }
