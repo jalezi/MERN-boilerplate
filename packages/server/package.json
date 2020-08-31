@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "start:nodemon": "nodemon server.js",
-    "test": "set NODE_ENV=test&& jest --runInBand"
+    "test": "set NODE_ENV=test&& jest --runInBand",
+    "test:watch": "set NODE_ENV=test&& jest --watch"
   },
   "keywords": [],
   "author": "",
