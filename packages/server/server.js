@@ -51,14 +51,4 @@ if (env !== 'test') {
   })();
 }
 
-process.on('uncaughtException', err => {
-  console.log(`Uncaught Exception: ${err.message}`);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled rejection at ', promise, `reason: ${reason}`);
-  process.exit(1);
-});
-
 module.exports = { app };
