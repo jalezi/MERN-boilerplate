@@ -31,6 +31,7 @@ if (env !== 'test') {
         if (err) {
           console.log('something bad happened', err);
         } else {
+          process.send = process.send || function () {};
           process.send && process.send('online');
           console.log(`Server is listening on ${port}`);
         }
@@ -41,7 +42,6 @@ if (env !== 'test') {
         timeout: 500,
       });
 
-      process.stdin.resume();
       process.on('uncaughtException', exitHandler(1, 'Unexpected Error'));
       process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'));
       process.on('SIGINT', exitHandler(0, 'SIGINT'));
