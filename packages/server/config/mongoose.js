@@ -7,23 +7,23 @@ const dbURI = env !== 'test' ? dbUri : dbUriTest;
 const shouldConsoleLog = isNodeEnvTest();
 
 mongoose.connection.on('connecting', () => {
-  shouldConsoleLog && console.log('Connection Establishing');
+  shouldConsoleLog && console.log('DB Connection Establishing');
 });
 
 mongoose.connection.on('connected', () => {
-  shouldConsoleLog && console.log('Connection Established');
+  shouldConsoleLog && console.log('DB Connection Established');
 });
 
 mongoose.connection.on('reconnected', () => {
-  shouldConsoleLog && console.log('Connection Reestablished');
+  shouldConsoleLog && console.log('DB Connection Reestablished');
 });
 
 mongoose.connection.on('disconnected', () => {
-  shouldConsoleLog && console.log('Connection Disconnected');
+  shouldConsoleLog && console.log('DB Connection Disconnected');
 });
 
 mongoose.connection.on('close', () => {
-  shouldConsoleLog && console.log('Connection Closed');
+  shouldConsoleLog && console.log('DB Connection Closed');
 });
 
 mongoose.connection.on('error', error => {
