@@ -3,3 +3,11 @@ const isNodeEnvTest = () => {
 };
 
 exports.isNodeEnvTest = isNodeEnvTest;
+
+exports.exitEvents = Object.freeze({
+  UNHANDLED_REJECTION: 'unhandledRejection',
+  UNHANDLED_EXCEPTION: 'uncaughtException',
+  SIGTERM: 'SIGTERM',
+  SIGINT: 'SIGINT',
+  SIGQUIT: 'SIGQUIT',
+});

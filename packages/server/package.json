@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "start:nodemon": "nodemon server.js",
+    "start": "node app.js",
+    "start:nodemon": "nodemon app.js",
     "test": "set NODE_ENV=test&& jest --runInBand",
     "test:watch": "set NODE_ENV=test&& jest --watch"
   },
