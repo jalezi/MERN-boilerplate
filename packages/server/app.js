@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
 const createHttpServer = require('./server');
-const { connectToDB } = require('./config');
+const { connectToDB, exitHandlerOptions } = require('./config');
 const { closeServer } = require('./utils');
 
 const app = express();
@@ -30,10 +30,7 @@ if (env !== 'test') {
       await connectToDB();
       server = await createHttpServer(app, port);
 
-      const exitHandler = closeServer(server, {
-        coredump: false,
-        timeout: 500,
-      });
+      const exitHandler = closeServer(server, exitHandlerOptions);
 
       process.on('uncaughtException', exitHandler(1, 'uncaughtException')); // Unexpected Error
       process.on('unhandledRejection', exitHandler(1, 'unhandledRejection')); // Unhandled Promise

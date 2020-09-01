@@ -4,5 +4,9 @@ exports.dbOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
+exports.exitHandlerOptions = {
+  coredump: false,
+  timeout: 500,
+};
 
 exports.connectToDB = require('./mongoose');
