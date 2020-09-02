@@ -1,21 +1,31 @@
-const appListenCallback = port => err => {
+const { isNotNodeEnvTest } = require('./utils');
+const shouldConsoleLog = isNotNodeEnvTest();
+
+const appListenCallback = (port = 3000) => err => {
   if (err) {
-    console.log('something bad happened', err);
-    // TODO Do I need: return Promise.reject(err) or something else or just logging?
-    // Promise.reject(err.message);
-    return Promise.reject(err.message);
-    // throw new Error(err.message);
-    // return new Error(err.message);
+    shouldConsoleLog && console.log('something bad happened', err);
+    throw new Error(err.message);
   } else {
     process.send = process.send || function () {};
     process.send && process.send('online');
-    console.log(`Server is listening on ${port}`);
+    shouldConsoleLog && console.log(`Server is listening on ${port}`);
   }
 };
 
 exports.appListenCallback = appListenCallback;
 
-exports.createHttpServer = async (app, port = 3000) => {
-  const cb = appListenCallback(port);
+const createHttpServer = async (app, port = 3000) => {
+  let cb;
+  try {
+    const isPortNotNumber = typeof port !== 'number';
+    if (isPortNotNumber) {
+      throw new Error('Port is not a number');
+    }
+    cb = appListenCallback(port);
+  } catch (err) {
+    throw new Error(err.message);
+  }
   return app.listen(port, cb);
 };
+
+exports.createHttpServer = createHttpServer;
