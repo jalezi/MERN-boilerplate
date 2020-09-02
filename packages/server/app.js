@@ -51,7 +51,6 @@ if (env !== 'test') {
     try {
       await connectToDB();
       server = await createHttpServer(app, port);
-
       const exitHandler = closeServer(server, exitHandlerOptions);
       addListenersToProcess(exitHandler);
     } catch (err) {
