@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
-const createHttpServer = require('./server');
+const { createHttpServer } = require('./server');
 const { connectToDB, exitHandlerOptions } = require('./config');
 const { closeServer } = require('./utils');
 

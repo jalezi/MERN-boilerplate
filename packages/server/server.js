@@ -13,7 +13,9 @@ const appListenCallback = port => err => {
   }
 };
 
-module.exports = async (app, port = 3000) => {
+exports.appListenCallback = appListenCallback;
+
+exports.createHttpServer = async (app, port = 3000) => {
   const cb = appListenCallback(port);
   return app.listen(port, cb);
 };
