@@ -5,6 +5,7 @@ const methodOverride = require('method-override');
 const { createHttpServer } = require('./server');
 const { connectToDB, exitHandlerOptions } = require('./config');
 const { closeServer } = require('./utils');
+const { addListenersToProcess } = require('./utils/utils');
 
 const app = express();
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -52,12 +53,7 @@ if (env !== 'test') {
       server = await createHttpServer(app, port);
 
       const exitHandler = closeServer(server, exitHandlerOptions);
-
-      process.on('uncaughtException', exitHandler(1, 'uncaughtException')); // Unexpected Error
-      process.on('unhandledRejection', exitHandler(1, 'unhandledRejection')); // Unhandled Promise
-      process.on('SIGINT', exitHandler(0, 'SIGINT'));
-      process.on('SIGQUIT', exitHandler(0, 'SIGQUIT'));
-      process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
+      addListenersToProcess(exitHandler);
     } catch (err) {
       console.log('Mongo or Server connection error', err);
     }

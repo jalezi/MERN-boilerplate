@@ -11,3 +11,11 @@ exports.exitEvents = Object.freeze({
   SIGINT: 'SIGINT',
   SIGQUIT: 'SIGQUIT',
 });
+
+exports.addListenersToProcess = exitHandler => {
+  process.on('uncaughtException', exitHandler(1, 'uncaughtException')); // Unexpected Error
+  process.on('unhandledRejection', exitHandler(1, 'unhandledRejection')); // Unhandled Promise
+  process.on('SIGINT', exitHandler(0, 'SIGINT'));
+  process.on('SIGQUIT', exitHandler(0, 'SIGQUIT'));
+  process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
+};
