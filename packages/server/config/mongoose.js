@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const { dbUri, dbUriTest, dbOptions } = require('.');
-const { isNodeEnvTest } = require('../utils');
+const { isNotNodeEnvTest } = require('../utils');
 
 const env = process.env.NODE_ENV;
 const dbURI = env !== 'test' ? dbUri : dbUriTest;
-const shouldConsoleLog = isNodeEnvTest();
+const shouldConsoleLog = isNotNodeEnvTest();
 
 mongoose.connection.on('connecting', () => {
   shouldConsoleLog && console.log('DB Connection Establishing');

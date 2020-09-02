@@ -1,8 +1,8 @@
 const utils = require('./utils');
 
-const { isNodeEnvTest } = utils;
+const { isNotNodeEnvTest } = utils;
 const { terminateDbConnection, closeServer } = require('./terminate');
 
-exports.isNodeEnvTest = isNodeEnvTest;
+exports.isNotNodeEnvTest = isNotNodeEnvTest;
 exports.terminateDbConnection = terminateDbConnection;
 exports.closeServer = closeServer;

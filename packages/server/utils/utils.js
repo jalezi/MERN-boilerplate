@@ -1,8 +1,8 @@
-const isNodeEnvTest = () => {
+const isNotNodeEnvTest = () => {
   return !(process.env.NODE_ENV === 'test');
 };
 
-exports.isNodeEnvTest = isNodeEnvTest;
+exports.isNotNodeEnvTest = isNotNodeEnvTest;
 
 exports.exitEvents = Object.freeze({
   UNHANDLED_REJECTION: 'unhandledRejection',

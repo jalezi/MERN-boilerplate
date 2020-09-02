@@ -1,13 +1,12 @@
-const { isNodeEnvTest } = require('.');
+const { isNotNodeEnvTest } = require('.');
 
 describe('', () => {
   test('is isJestUndefined defined and function', () => {
-    expect(isNodeEnvTest).toBeDefined();
-    expect(typeof isNodeEnvTest).toBe('function');
+    expect(isNotNodeEnvTest).toBeDefined();
+    expect(typeof isNotNodeEnvTest).toBe('function');
   });
 
   test('isNodeEnvTest should return falsy', () => {
-    expect(isNodeEnvTest()).toBeFalsy();
+    expect(isNotNodeEnvTest()).toBeFalsy();
   });
-
 });
