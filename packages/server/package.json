@@ -31,6 +31,13 @@
   "jest": {
     "preset": "@shelf/jest-mongodb",
     "verbose": true,
-    "collectCoverage": true
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "html"
+    ]
   }
 }
