@@ -2,15 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
-const { createHttpServer } = require('./server');
-const { connectToDB, exitHandlerOptions } = require('./config');
-const { closeServer } = require('./utils');
-const { addListenersToProcess } = require('./utils/utils');
+// const { createHttpServer } = require('./server');
+// const { connectToDB, exitHandlerOptions } = require('./config');
+// const { closeServer } = require('./utils');
+// const { addListenersToProcess } = require('./utils/utils');
 
 const app = express();
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const env = process.env.NODE_ENV;
-const port = 4000; // port must match proxy settings in client package.json
 
 app.use(
   bodyParser.urlencoded({
@@ -45,18 +44,9 @@ app.use((error, _req, res, _next) => {
   });
 });
 
-let server;
 if (env !== 'test') {
-  (async () => {
-    try {
-      await connectToDB();
-      server = await createHttpServer(app, port);
-      const exitHandler = closeServer(server, exitHandlerOptions);
-      addListenersToProcess(exitHandler);
-    } catch (err) {
-      console.log('Mongo or Server connection error', err);
-    }
-  })();
+  const { appInit } = require('./config');
+  appInit(app);
 }
 
 module.exports = { app };

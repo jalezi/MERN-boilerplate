@@ -9,4 +9,6 @@ exports.exitHandlerOptions = {
   timeout: 500,
 };
 
-exports.connectToDB = require('./mongoose');
+exports.connectToDB = require('./mongoose.config');
+
+exports.appInit = require('./server.config');
