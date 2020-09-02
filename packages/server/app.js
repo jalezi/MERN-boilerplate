@@ -19,8 +19,29 @@ app.use(
 app.use(bodyParser.json());
 app.use(methodOverride());
 
-app.get('/api', (req, res) => {
-  res.json({ status: 200, message: 'GET /api' });
+app.get('/api', (_req, res) => {
+  res.json({ status: 200, message: 'success' });
+});
+
+// app.js: register the route. In our case, we don't want authorization for this route
+// add authorization middleware if needed
+app.use('/healthcheck', require('./routes/healthcheck.routes'));
+
+app.use((_req, _res, next) => {
+  const error = new Error('Not found');
+  error.status = 404;
+  next(error);
+});
+
+// error handler middleware
+// eslint-disable-next-line no-unused-vars
+app.use((error, _req, res, _next) => {
+  res.status(error.status || 500).send({
+    error: {
+      status: error.status || 500,
+      message: error.message || 'Internal Server Error',
+    },
+  });
 });
 
 let server;

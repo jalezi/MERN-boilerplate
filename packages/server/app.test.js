@@ -20,10 +20,13 @@ describe('Require Modules', () => {
 });
 
 describe('Endpoints', () => {
-  it('should get /api', async done => {
+  it('should get /api', async () => {
     const res = await request(app).get('/api');
     expect(res.statusCode).toEqual(200);
-    expect(res.body.message).toBe('GET /api');
-    done();
+    expect(res.body.message).toBe('success');
+  });
+
+  it('returns 404', async () => {
+    await request(app).get(`/foo/bar`, null).expect(404);
   });
 });
