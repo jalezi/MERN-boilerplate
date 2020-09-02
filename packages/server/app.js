@@ -23,6 +23,10 @@ app.get('/api', (_req, res) => {
   res.json({ status: 200, message: 'success' });
 });
 
+// app.js: register the route. In our case, we don't want authorization for this route
+// add authorization middleware if needed
+app.use('/healthcheck', require('./routes/healthcheck.routes'));
+
 app.use((_req, _res, next) => {
   const error = new Error('Not found');
   error.status = 404;
