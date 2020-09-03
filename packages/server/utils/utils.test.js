@@ -20,8 +20,8 @@ describe('Testing exitEvents Object', () => {
 });
 
 describe('Testing addListenersToProcess', () => {
-  test('somethin something', () => {
+  test('add process listeners without error', () => {
     const exitHandler = () => () => {};
-    addListenersToProcess(exitHandler);
+    expect(() => addListenersToProcess(exitHandler)).not.toThrowError();
   });
 });
