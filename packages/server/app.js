@@ -2,10 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
-// const { createHttpServer } = require('./server');
-// const { connectToDB, exitHandlerOptions } = require('./config');
-// const { closeServer } = require('./utils');
-// const { addListenersToProcess } = require('./utils/utils');
+const { appInit } = require('./config');
 
 const app = express();
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -45,8 +42,7 @@ app.use((error, _req, res, _next) => {
 });
 
 if (env !== 'test') {
-  const { appInit } = require('./config');
-  appInit(app);
+  appInit()(app);
 }
 
 module.exports = { app };
