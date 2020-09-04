@@ -8,7 +8,9 @@ const shouldConsoleLog = isNotNodeEnvTest();
 const appListenCallback = (port = 3000) => err => {
   if (err) {
     shouldConsoleLog && console.log('something bad happened', err);
-    throw new Error(err.message);
+    return Promise.reject(
+      new Error('Something went wrong in appListenCallback ')
+    );
   } else {
     process.send = process.send || function () {};
     process.send && process.send('online');
@@ -20,25 +22,14 @@ exports.appListenCallback = appListenCallback;
 
 const createHttpServer = async (app, port = 3000) => {
   let cb;
-  try {
-    const isPortNotNumber = typeof port !== 'number';
-    if (isPortNotNumber) {
-      throw new Error('Port is not a number');
-    }
-    cb = appListenCallback(port);
-  } catch (err) {
-    throw new Error(err.message);
+  const isPortNotNumber = typeof port !== 'number';
+  if (isPortNotNumber) {
+    return Promise.reject(new Error('Port is not a number'));
   }
 
-  let server;
-  try {
-    server = app.listen(port, cb);
-    return server;
-  } catch (err) {
-    console.log(err.message);
-    // throw new Error(err.message);
-    return new Error(err.message);
-  }
+  cb = appListenCallback(port);
+
+  return app.listen(port, cb);
 };
 
 exports.createHttpServer = createHttpServer;
@@ -50,11 +41,16 @@ const appInit = () => async app => {
     server = await createHttpServer(app, port);
     const exitHandler = closeServer(server, exitHandlerOptions);
     addListenersToProcess(exitHandler);
+    if (server instanceof Error) {
+      console.log(server);
+    }
+    return server;
   } catch (err) {
-    console.log('Mongo or Server connection error', err);
-    throw new Error(err.msg);
+    shouldConsoleLog && console.log(err);
+    return Promise.reject(
+      new Error('Something went wrong during app initialization')
+    );
   }
-  return server;
 };
 
 exports.appInit = appInit;

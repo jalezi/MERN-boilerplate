@@ -16,11 +16,10 @@ describe('Testing app.listen(port, cb) Callback Function', () => {
     expect(cb).toBeInstanceOf(Function);
   });
 
-  test('Callback should throw an error', () => {
+  test('Callback should throw an error', async () => {
     const cb = appListenCallback();
-    expect(() => {
-      cb(new Error('My Error'));
-    }).toThrowError('My Error');
+    const err = cb(new Error('My Error'));
+    await expect(err).rejects.toBeInstanceOf(Error);
   });
 
   test('Callback should pass without an error', () => {
