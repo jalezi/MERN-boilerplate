@@ -1,9 +1,15 @@
 const utils = require('./utils');
 const { terminateDbConnection, closeServer } = require('./terminate');
 
-const { isNotNodeEnvTest, exitEvents, addListenersToProcess } = utils;
+const {
+  isNotNodeEnvTest,
+  shouldConsoleLog,
+  exitEvents,
+  addListenersToProcess,
+} = utils;
 
 exports.isNotNodeEnvTest = isNotNodeEnvTest;
+exports.shouldConsoleLog = shouldConsoleLog;
 exports.exitEvents = exitEvents;
 exports.addListenersToProcess = addListenersToProcess;
 

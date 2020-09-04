@@ -4,6 +4,8 @@ const isNotNodeEnvTest = () => {
 
 exports.isNotNodeEnvTest = isNotNodeEnvTest;
 
+exports.shouldConsoleLog = isNotNodeEnvTest();
+
 exports.exitEvents = Object.freeze({
   UNHANDLED_REJECTION: 'unhandledRejection',
   UNHANDLED_EXCEPTION: 'uncaughtException',
