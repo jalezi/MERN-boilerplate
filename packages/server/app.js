@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const mongoose = require('mongoose');
 
 const { appInit } = require('./config');
+const { shouldConsoleLog } = require('./utils');
 
 const app = express();
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -42,7 +44,21 @@ app.use((error, _req, res, _next) => {
 });
 
 if (env !== 'test') {
-  appInit()(app);
+  appInit()(app).catch(err => {
+    console.log(err);
+    const code = 1;
+    shouldConsoleLog &&
+      console.log(
+        `Process pid ${process.pid} will be terminated with exit code: ${code}`
+      );
+    console.log('Closing DB connection');
+    mongoose.connection.close().catch(err => {
+      shouldConsoleLog &&
+        console.log('Something went wrong during closing DB connection');
+      shouldConsoleLog && console.log(err);
+    });
+    process.exit(code);
+  });
 }
 
 module.exports = { app };
