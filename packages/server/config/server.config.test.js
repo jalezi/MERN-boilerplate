@@ -59,7 +59,7 @@ describe('Testing Create Server Function', () => {
 
 describe('Testing App Initialization Functions', () => {
   const app = express();
-  const serverInit = appInit();
+  const serverInit = appInit(app);
 
   describe('Testing appInit Function', () => {
     it('should be defined and instance of function', () => {
@@ -83,8 +83,26 @@ describe('Testing App Initialization Functions', () => {
       await mongoose.connection.close();
     });
 
-    test('Server is defined', () => {
+    test('Server is defined and listen on port 4000', () => {
       expect(server).toBeDefined();
+      expect(server.address()).toBeTruthy();
+      expect(server.address().port).toBe(4000);
+    });
+
+    test('Catch an error Something went wrong during app initialization', () => {
+      serverInit().catch(err => {
+        expect(err).toBeInstanceOf(Error);
+        expect(err.message).toBe(
+          'Something went wrong during app initialization'
+        );
+      });
+    });
+
+    test('Catch an error App can not listen on port: 4000', () => {
+      serverInit(app).catch(err => {
+        expect(err).toBeInstanceOf(Error);
+        expect(err.message).toBe('App can not listen on port: 4000');
+      });
     });
   });
 });
