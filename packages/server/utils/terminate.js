@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { shouldConsoleLog } = require('.');
 
 const abortOrExit = (code = 0, coredump = false) => () => {
   coredump ? process.abort() : process.exit(code);
@@ -18,8 +19,9 @@ const logExitEvents = {
     console.log(`Process ${process.pid} received a uncaughtException signal`),
   SIGTERM: () =>
     console.log(`Process ${process.pid} received a SIGTERM signal`),
-  SIGINT: () => console.log(`Process ${process.pid} has been interrupted`),
-  SIGQUIT: () => console.log(`Process ${process.pid} has been interrupted`),
+  SIGINT: () => console.log(`Process ${process.pid} received a SIGINT signal`),
+  SIGQUIT: () =>
+    console.log(`Process ${process.pid} received a SIGQUIT signal`),
 };
 
 const logError = err => console.log(err.message, err.stack);
@@ -43,7 +45,7 @@ const closeServer = (server, options = { coredump: false, timeout: 500 }) => {
     const exit = abortOrExit(code, coredump);
 
     // Attempt a graceful shutdown
-    console.log('Closing HTTP Server.');
+    shouldConsoleLog && console.log('Closing HTTP Server.');
     try {
       await server.close();
       console.log('HTTP Server Closed.');
