@@ -32,4 +32,4 @@ const healthcheckController = async (_req, res, _next) => {
   }
 };
 
-exports.healthCheckController = healthcheckController;
+exports.healthcheckController = healthcheckController;
