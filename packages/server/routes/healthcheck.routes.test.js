@@ -21,10 +21,13 @@ describe('Healthcheck', () => {
     expect(res.body.dbConnectionStatus).toBe(1);
   });
 
-  it('returns 200 if server is running and DB not connected', async () => {
+  it('returns 503 if server is running and DB not connected', async () => {
     await connection.close();
-    const res = await request(app).get(`/healthcheck`, null).expect(200);
+    const res = await request(app).get(`/healthcheck`, null).expect(503);
     expect(res.body.uptime).toBeGreaterThan(0);
     expect(res.body.dbConnectionStatus).toBe(0);
+    expect(res.body.message).toBe(
+      'DB not connected. DB connection state is: disconnected'
+    );
   });
 });
