@@ -45,13 +45,13 @@ app.use((error, _req, res, _next) => {
 
 if (env !== 'test') {
   appInit()(app).catch(err => {
-    console.log(err);
+    shouldConsoleLog && console.log(err);
     const code = 1;
     shouldConsoleLog &&
       console.log(
         `Process pid ${process.pid} will be terminated with exit code: ${code}`
       );
-    console.log('Closing DB connection');
+    shouldConsoleLog && console.log('Closing DB connection');
     mongoose.connection.close().catch(err => {
       shouldConsoleLog &&
         console.log('Something went wrong during closing DB connection');

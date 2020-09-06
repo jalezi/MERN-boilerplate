@@ -41,15 +41,15 @@ const appInit = () => async app => {
     server = await createHttpServer(app, port);
     const exitHandler = closeServer(server, exitHandlerOptions);
     addListenersToProcess(exitHandler);
-    if (server instanceof Error) {
-      console.log(server);
+
+    if (server.address() === null) {
+      return Promise.reject(new Error(`App can not listen on port: ${port}`));
     }
+
     return server;
   } catch (err) {
     shouldConsoleLog && console.log(err);
-    return Promise.reject(
-      new Error('Something went wrong during app initialization')
-    );
+    throw new Error('Something went wrong during app initialization');
   }
 };
 
