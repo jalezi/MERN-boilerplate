@@ -37,7 +37,7 @@ describe('Endpoints', () => {
   });
 
   it('returns 501', async () => {
-    const res = await request(app).get('/api/error');
+    const res = await request(app).post('/api/error');
     console.log(res.statusCode);
     expect(res.statusCode).toEqual(501);
   });
