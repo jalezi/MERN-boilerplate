@@ -5,6 +5,7 @@ exports.dbUriTest = 'mongodb://localhost:27017/mernTest';
 exports.dbOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 };
 
 exports.exitHandlerOptions = {
