@@ -32,13 +32,11 @@ describe('Endpoints', () => {
 
   it('returns 500', async () => {
     const res = await request(app).get('/api/error');
-    // console.log(res.statusCode);
     expect(res.statusCode).toEqual(500);
   });
 
   it('returns 501', async () => {
-    const res = await request(app).get('/api/error');
-    console.log(res.statusCode);
+    const res = await request(app).post('/api/error');
     expect(res.statusCode).toEqual(501);
   });
 });
