@@ -22,6 +22,18 @@ app.get('/api', (_req, res) => {
   res.json({ status: 200, message: 'success' });
 });
 
+// temporary fake 500 internal server error
+app.get('/api/error', (_req, _res, next) => {
+  const err = new Error('This is fake error');
+  next(err);
+});
+// temporary fake 501 internal server error
+app.post('/api/error', (_req, _res) => {
+  const err = new Error('This is fake throw error');
+  err.status = 501;
+  throw err;
+});
+
 // app.js: register the route. In our case, we don't want authorization for this route
 // add authorization middleware if needed
 app.use('/healthcheck', require('./routes/healthcheck.routes'));
@@ -35,6 +47,7 @@ app.use((_req, _res, next) => {
 // error handler middleware
 // eslint-disable-next-line no-unused-vars
 app.use((error, _req, res, _next) => {
+  console.log(_req.status);
   res.status(error.status || 500).send({
     error: {
       status: error.status || 500,

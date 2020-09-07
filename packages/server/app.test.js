@@ -29,4 +29,16 @@ describe('Endpoints', () => {
   it('returns 404', async () => {
     await request(app).get(`/foo/bar`, null).expect(404);
   });
+
+  it('returns 500', async () => {
+    const res = await request(app).get('/api/error');
+    // console.log(res.statusCode);
+    expect(res.statusCode).toEqual(500);
+  });
+
+  it('returns 501', async () => {
+    const res = await request(app).get('/api/error');
+    console.log(res.statusCode);
+    expect(res.statusCode).toEqual(501);
+  });
 });
