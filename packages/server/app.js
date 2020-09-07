@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 
@@ -11,11 +10,11 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const env = process.env.NODE_ENV;
 
 app.use(
-  bodyParser.urlencoded({
+  express.urlencoded({
     extended: true,
   })
 );
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(methodOverride());
 
 app.get('/api', (_req, res) => {
@@ -28,6 +27,7 @@ app.get('/api/error', (_req, _res, next) => {
   next(err);
 });
 // temporary fake 501 internal server error
+// eslint-disable-next-line no-unused-vars
 app.post('/api/error', (_req, _res) => {
   const err = new Error('This is fake throw error');
   err.status = 501;
@@ -47,7 +47,6 @@ app.use((_req, _res, next) => {
 // error handler middleware
 // eslint-disable-next-line no-unused-vars
 app.use((error, _req, res, _next) => {
-  console.log(_req.status);
   res.status(error.status || 500).send({
     error: {
       status: error.status || 500,
