@@ -8,6 +8,7 @@ GET http://{{host}}/api HTTP/1.1
 ### Get healthcheck
 GET http://{{host}}/healthcheck HTTP/1.1
 
+### ERRORS
 ### Get 404 Not Found
 GET http://{{host}}/foo/bar HTTP/1.1
 
@@ -16,3 +17,31 @@ GET http://{{host}}/api/error HTTP/1.1
 
 ### GET api/error
 POST http://{{host}}/api/error HTTP/1.1
+
+### --- AUTH ROUTES ---
+### --- SIGNUP ---
+### GET SIGNUP
+GET http://{{host}}/api/auth/signup HTTP/1.1
+
+### POST SIGNUP
+POST http://{{host}}/api/auth/signup HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "toad@example.com",
+  "password": "test12",
+  "confirmPassword": "test12"
+}
+
+### --- LOGIN ---
+### GET LOGIN
+GET http://{{host}}/api/auth/login HTTP/1.1
+
+### POST LOGIN
+POST http://{{host}}/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "toad@example.com",
+  "password": "test12" 
+}

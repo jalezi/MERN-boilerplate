@@ -36,7 +36,9 @@ app.post('/api/error', (_req, _res) => {
 
 // app.js: register the route. In our case, we don't want authorization for this route
 // add authorization middleware if needed
+// TODO change /healthcheck to /api/healthcheck
 app.use('/healthcheck', require('./routes/healthcheck.routes'));
+app.use('/api/auth', require('./routes/auth.routes'));
 
 app.use((_req, _res, next) => {
   const error = new Error('Not found');
