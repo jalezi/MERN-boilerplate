@@ -1,6 +1,6 @@
 exports.port = process.env.port || 4000; // port must match proxy settings in client package.json
 
-exports.dbUri = 'mongodb://localhost:27017/mern';
+exports.dbUri = 'mongodb://localhost:27017/mernBoilerPlate';
 exports.dbUriTest = 'mongodb://localhost:27017/mernTest';
 exports.dbOptions = {
   useNewUrlParser: true,
