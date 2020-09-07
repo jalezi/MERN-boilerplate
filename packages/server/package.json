@@ -2,23 +2,24 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js",
-    "start:nodemon": "nodemon server.js",
-    "test": "set NODE_ENV=test&& jest --watchAll"
+    "start": "node app.js",
+    "start:nodemon": "nodemon app.js",
+    "test": "set NODE_ENV=test&& jest --runInBand",
+    "test:watch": "set NODE_ENV=test&& jest --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "method-override": "^3.0.0",
     "mongoose": "^5.10.0"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.2.2",
+    "@types/jest": "^26.0.10",
     "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "^23.20.0",
@@ -27,6 +28,15 @@
     "supertest": "^4.0.2"
   },
   "jest": {
-    "preset": "@shelf/jest-mongodb"
+    "preset": "@shelf/jest-mongodb",
+    "verbose": true,
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "html"
+    ]
   }
 }

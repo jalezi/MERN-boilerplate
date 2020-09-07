@@ -1,0 +1,18 @@
+@hostname = localhost
+@port = 4000
+@host = {{hostname}}:{{port}}
+
+### Get api
+GET http://{{host}}/api HTTP/1.1
+
+### Get healthcheck
+GET http://{{host}}/healthcheck HTTP/1.1
+
+### Get 404 Not Found
+GET http://{{host}}/foo/bar HTTP/1.1
+
+### GET api/error
+GET http://{{host}}/api/error HTTP/1.1
+
+### GET api/error
+POST http://{{host}}/api/error HTTP/1.1

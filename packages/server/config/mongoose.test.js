@@ -1,31 +1,30 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 
-const { connectToDB } = require('.');
-const { dbUri, dbUriTest, dbOptions } = require('.');
+const { connectToDB, dbUri, dbUriTest, dbOptions } = require('.');
 
 describe('Require Modules', () => {
-  it('connectToDb should be a function', () => {
+  test('connectToDb should be a function', () => {
     expect(connectToDB).toBeDefined();
     expect(typeof connectToDB).toBe('function');
   });
 
-  it('dbUri should be a string', () => {
+  test('dbUri should be a string', () => {
     expect(dbUri).toBeDefined();
     expect(typeof dbUri).toBe('string');
   });
-  it('dbUriTest should be string', () => {
+  test('dbUriTest should be string', () => {
     expect(dbUriTest).toBeDefined();
     expect(typeof dbUriTest).toBe('string');
   });
-  it('dbOptions should be an object', () => {
+  test('dbOptions should be an object', () => {
     expect(dbOptions).toBeDefined();
     expect(typeof dbOptions).toBe('object');
   });
 });
 
-describe('DATABASE CONNECTIONS', () => {
-  describe('DB test connection dbName = mernTest', () => {
+describe('Database Connections ', () => {
+  describe('DB test connection mernTest database', () => {
     let connection;
     let db;
 
@@ -40,7 +39,7 @@ describe('DATABASE CONNECTIONS', () => {
       await db.close();
     });
 
-    it('should connects to testing database', () => {
+    it('should connect to testing database', () => {
       const { url } = connection.client.s;
       const { databaseName } = db;
       expect(url).toBe(dbUriTest);
@@ -48,7 +47,7 @@ describe('DATABASE CONNECTIONS', () => {
     });
   });
 
-  describe('DB test connection json-mongo database', () => {
+  describe('DB test connection @shelf/jest-mongodb database', () => {
     let connection;
     let db;
     let mongoUri;
@@ -72,11 +71,28 @@ describe('DATABASE CONNECTIONS', () => {
       fs.unlink(process.cwd() + '/globalConfig.json', () => {});
     });
 
-    it('should connects to testing db', () => {
+    it('should connect to testing db', () => {
       const { url } = connection.client.s;
       const { databaseName } = db;
       expect(url).toBe(mongoUri);
       expect(databaseName).toBe(mongoDbName);
+    });
+  });
+
+  describe('DB test error connection ', () => {
+    it('should not connect to db and should throw an error', async () => {
+      // error: MongoParseError: Invalid connection string
+      const mongoUri = 'wrong url';
+      const mongoDbName = global.__MONGO_DB_NAME__;
+      try {
+        await connectToDB({
+          url: mongoUri,
+          options: { ...dbOptions, dbName: mongoDbName },
+        });
+      } catch (error) {
+        expect(error).toBeInstanceOf(mongoose.Error.MongoParseError);
+        expect(error.message).toEqual('Invalid connection string');
+      }
     });
   });
 });
