@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const User = require('./User');
 const { connectToDB, dbOptions } = require('../config');
-const userData = {
-  name: 'TekLoon',
-  gender: 'Male',
-  dob: new Date(),
-  loginUsing: 'Facebook',
+
+const userDataOne = {
+  email: 'example@example.com',
+  password: 'test1234',
+};
+
+const userDataTwo = {
+  email: 'usertwo@example.com',
+  password: 'test1234',
 };
 
 describe('Require Modules', () => {
@@ -62,18 +66,18 @@ describe('User Model Test', () => {
   });
 
   it('creates & saves user successfully', async () => {
-    const validUser = new User(userData);
+    const validUser = new User(userDataOne);
     const savedUser = await validUser.save();
     // Object Id should be defined when successfully saved to MongoDB.
     expect(savedUser._id).toBeDefined();
-    expect(savedUser.name).toBe(userData.name);
-    expect(savedUser.gender).toBe(userData.gender);
-    expect(savedUser.dob).toBe(userData.dob);
-    expect(savedUser.loginUsing).toBe(userData.loginUsing);
+    expect(savedUser.email).toBe(userDataOne.email);
+    expect(savedUser.password).toBe(userDataOne.password);
+    // expect(savedUser.dob).toBe(userData.dob);
+    // expect(savedUser.loginUsing).toBe(userData.loginUsing);
   });
 
   it('finds user by id', async () => {
-    const validUser = new User(userData);
+    const validUser = new User(userDataTwo);
     const savedUser = await validUser.save();
     const user = await User.findById(savedUser.id);
     expect(user.id).toEqual(savedUser.id);
